@@ -6,8 +6,7 @@ const PORT = 5000;
 // serve the index file
 const indexPath = __dirname + '/index.html';
 
-const notes = [];
-
+// serve the basic page
 app.get("/", (req, res) => {
   res.sendFile(indexPath);
 });
@@ -19,18 +18,46 @@ app.get("/notes", (req, res) => {
   res.sendFile(notesPath);
 });
 
-// serve the api
+app.use(express.json())
 app.use(express.urlencoded({extended: true}));
+
+// post api
+let noteId = 0;
 app.post("/api/notes", (req, res) => {
-  newNote = JSON.stringify(req.body);
-  notes[notes.length] = newNote;
-  console.log(notes);
-  res.send('saved!')
+  const rawdata = fs.readFileSync('notes.json', 'utf8');
+  const parsedata = JSON.parse(rawdata);
+  const newObj = parsedata.concat(req.body);
+  const string = JSON.stringify(newObj);
+  fs.writeFile('notes.json', string, (err)=>{
+    if(err) console.log(err);
+    res.json(string);
+  })
 });
 
+// get api
 app.get('/api/notes', (req,res)=>{
-  res.send(notes);
+  fs.readFile('notes.json','utf8', (err,jsonString)=>{
+    if(err) {
+      console.log(err);
+      return
+    };
+    res.json(JSON.parse(jsonString))
+  })
 });
+
+// delete api
+app.delete('/api/notes/:title', (req,res)=>{
+  const rawData = fs.readFileSync('notes.json', 'utf-8');
+  const parseData = JSON.parse(rawData);
+  const { title } = req.params;
+  console.log(title)
+  const newData = parseData.filter(o => o.title !== title);
+  console.log(newData)
+  fs.writeFile('notes.json', JSON.stringify(newData), (err)=>{
+    if(err) console.log(err);
+    res.json(newData);
+  })
+})
 
 // Serve static assets 
 app.use(express.static(__dirname + '/'))
