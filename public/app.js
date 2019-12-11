@@ -1,10 +1,12 @@
 var express = require("express");
 var app = express();
 const fs = require("fs");
+const path = require("path");
 const PORT = 5000;
-
 // serve the index file
-const indexPath = __dirname + '/index.html'
+const indexPath = __dirname + '/index.html';
+
+const notes = [];
 
 app.get("/", (req, res) => {
   res.sendFile(indexPath);
@@ -18,21 +20,17 @@ app.get("/notes", (req, res) => {
 });
 
 // serve the api
-
+app.use(express.urlencoded({extended: true}));
 app.post("/api/notes", (req, res) => {
-  const newNote = req.body;
-  fs.appendFile('notes.txt', newNote, function (err) {
-    if (err) throw err;
-    console.log('Saved!');
-  });
+  newNote = JSON.stringify(req.body);
+  notes[notes.length] = newNote;
+  console.log(notes);
+  res.send('saved!')
 });
 
 app.get('/api/notes', (req,res)=>{
-  fs.readFile('notes.txt', (err, data)=>{
-    if (err) throw err;
-    res.send(data); 
-  });
-})
+  res.send(notes);
+});
 
 // Serve static assets 
 app.use(express.static(__dirname + '/'))
