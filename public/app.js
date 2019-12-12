@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 const fs = require("fs");
 const path = require("path");
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 // serve the index file
 const indexPath = __dirname + '/index.html';
 
