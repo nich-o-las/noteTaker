@@ -1,6 +1,8 @@
 # NoteTaker
 Note taking web application.
 
+![](./noteTaker.gif)
+
 ## Tools Used: 
 1. HTML/CSS
 2. JavaScript/JQuery
