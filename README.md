@@ -1,6 +1,11 @@
 # NoteTaker
+Note taking web application.
 
-### Note-Taking app built with HTML, CSS, Node, and Express.
+## Tools Used: 
+1. HTML/CSS
+2. JavaScript/JQuery
+2. Node
+3. Express
 
 ## User Story: 
 ### As a person who would like to remember things, I would like to:
